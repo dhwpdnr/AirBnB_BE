@@ -1,5 +1,5 @@
 """
-ASGI config for AirBnB_BE project.
+ASGI config for config project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
