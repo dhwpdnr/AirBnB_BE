@@ -36,7 +36,6 @@ ALLOWED_HOSTS = []
 
 
 CUSTOM_APPS = [
-    'houses',
     'users',
 ]
 
