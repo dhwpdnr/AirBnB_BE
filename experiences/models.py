@@ -2,7 +2,7 @@ from django.db import models
 from common.models import CommonModel
 
 
-class Experiences(CommonModel):
+class Experience(CommonModel):
     """Experiences Model Definition"""
 
     country = models.CharField(max_length=50, default="한국")
