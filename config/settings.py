@@ -40,6 +40,7 @@ CUSTOM_APPS = [
     "rooms",
     "common",
     "experiences",
+    "categories",
 ]
 
 SYSTEM_APPS = [
