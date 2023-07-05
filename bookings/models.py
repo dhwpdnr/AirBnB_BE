@@ -9,7 +9,7 @@ class Booking(CommonModel):
         ROOM = ("room", "Room")
         EXPERIENCE = ("experience", "Experience")
 
-    kind = models.CharField(max_length=15, choices=BookingKindChoices)
+    kind = models.CharField(max_length=15, choices=BookingKindChoices.choices)
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
     room = models.ForeignKey(
         "rooms.Room", on_delete=models.SET_NULL, null=True, blank=True
@@ -21,3 +21,6 @@ class Booking(CommonModel):
     check_out = models.DateField(null=True, blank=True)
     experience_time = models.DateField(null=True, blank=True)
     guests = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.kind.title()} booking for {self.user}"
