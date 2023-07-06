@@ -4,9 +4,11 @@ from .models import ChattingRoom, Messages
 
 @admin.register(ChattingRoom)
 class ChattingRoomAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("__str__", "created_at", "updated_at")
+    list_filter = ("created_at",)
 
 
 @admin.register(Messages)
 class MessageAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("text", "user", "room", "created_at")
+    list_filter = ("created_at",)
