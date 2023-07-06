@@ -2,7 +2,7 @@ from django.db import models
 from common.models import CommonModel
 
 
-class Room(CommonModel):
+class ChattingRoom(CommonModel):
     """Room Model Definition"""
 
     users = models.ManyToManyField(
@@ -17,4 +17,4 @@ class Messages(CommonModel):
     user = models.ForeignKey(
         "users.User", null=True, blank=True, on_delete=models.SET_NULL
     )
-    room = models.ForeignKey("direct_messages.Room", on_delete=models.CASCADE)
+    room = models.ForeignKey("direct_messages.ChattingRoom", on_delete=models.CASCADE)

@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Room, Messages
+from .models import ChattingRoom, Messages
 
 
-@admin.register(Room)
-class RoomAdmin(admin.ModelAdmin):
+@admin.register(ChattingRoom)
+class ChattingRoomAdmin(admin.ModelAdmin):
     pass
 
 
