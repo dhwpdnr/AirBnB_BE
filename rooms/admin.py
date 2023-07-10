@@ -11,7 +11,7 @@ def reset_prices(model_admin, request, rooms):
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-    actions = reset_prices
+    actions = (reset_prices,)
 
     list_display = (
         "name",
