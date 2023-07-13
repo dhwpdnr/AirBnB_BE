@@ -1,4 +1,7 @@
 from django.urls import path
-from .views import say_hello
+from .views import see_all_rooms, see_one_room
 
-urlpatterns = [path("", say_hello())]
+urlpatterns = [
+    path("", see_all_rooms),
+    path("<int:room_id>", see_one_room),
+]
