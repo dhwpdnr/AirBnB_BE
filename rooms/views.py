@@ -61,6 +61,7 @@ class Rooms(APIView):
         serializer = RoomListSerializer(all_rooms, many=True)
         return Response(serializer.data)
 
+    @transaction.atomic()
     def post(self, request):
         if request.user.is_authenticated:
             serializer = RoomDetailSerializer(data=request.data)
@@ -75,14 +76,13 @@ class Rooms(APIView):
                 except Category.DoesNotExist:
                     raise ParseError("Category not found")
                 try:
-                    with transaction:
-                        room = serializer.save(owner=request.user, category=category)
-                        amenities = request.data.get("amenities")
-                        for amenity_pk in amenities:
-                            amenity = Amenity.objects.get(pk=amenity_pk)
-                            room.amenities.add(amenity)
-                        serializer = RoomDetailSerializer(room)
-                        return Response(serializer.data)
+                    room = serializer.save(owner=request.user, category=category)
+                    amenities = request.data.get("amenities")
+                    for amenity_pk in amenities:
+                        amenity = Amenity.objects.get(pk=amenity_pk)
+                        room.amenities.add(amenity)
+                    serializer = RoomDetailSerializer(room)
+                    return Response(serializer.data)
                 except Exception:
                     raise ParseError("Amenity Not Found.")
             else:
@@ -102,6 +102,10 @@ class RoomDetail(APIView):
         room = self.get_object(pk)
         serializer = RoomDetailSerializer(room)
         return Response(serializer.data)
+
+    # put method 해야함
+    def put(self, request, pk):
+        pass
 
     def delete(self, request, pk):
         room = self.get_object(pk)
