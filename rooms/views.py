@@ -103,15 +103,43 @@ class RoomDetail(APIView):
         serializer = RoomDetailSerializer(room)
         return Response(serializer.data)
 
-    # put method 해야함
+    @transaction.atomic()
     def put(self, request, pk):
-        pass
-
-    def delete(self, request, pk):
-        room = self.get_object(pk)
         if not request.user.is_authenticated:
             raise NotAuthenticated
-        if room.owner != request.user:
-            raise PermissionDenied
-        room.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        serializer = RoomDetailSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        category_id = request.data.get("category")
+        if not category_id:
+            raise ParseError("Category is required.")
+        try:
+            category = Category.objects.get(pk=category_id)
+            if category.kind == Category.CategoryKindChoices.EXPERIENCE:
+                raise ParseError("The Category kind should be rooms")
+        except Category.DoesNotExist:
+            raise ParseError("Category not found")
+        amenity_list = []
+        amenities_pk = request.data.get("amenities")
+        for amenities in amenities_pk:
+            try:
+                amenity = Amenity.objects.get(pk=amenities)
+                if not amenity:
+                    raise ParseError("amenities가 알맞지 않습니다.")
+                amenity_list.append(amenity)
+            except Amenity.DoesNotExist:
+                pass
+        update_room = serializer.save(
+            category=category,
+            amenities=amenity_list,
+        )
+        return Response(RoomDetailSerializer(update_room).data)
+
+
+def delete(self, request, pk):
+    room = self.get_object(pk)
+    if not request.user.is_authenticated:
+        raise NotAuthenticated
+    if room.owner != request.user:
+        raise PermissionDenied
+    room.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
