@@ -14,13 +14,22 @@ class RoomDetailSerializer(serializers.ModelSerializer):
     owner = TinyUserSerializer(read_only=True)
     amenities = AmenitySerializer(read_only=True, many=True)
     category = CategorySerializer(read_only=True)
+    rating = serializers.SerializerMethodField()
 
     class Meta:
         model = Room
         fields = "__all__"
 
+    def get_rating(self, obj):
+        return obj.rating()
+
 
 class RoomListSerializer(serializers.ModelSerializer):
+    rating = serializers.SerializerMethodField()
+
     class Meta:
         model = Room
-        fields = ("id", "name", "country", "city", "price")
+        fields = ("id", "name", "country", "city", "price", "rating")
+
+    def get_rating(self, obj):
+        return obj.rating()
