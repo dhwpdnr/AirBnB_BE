@@ -11,6 +11,7 @@ from rest_framework.exceptions import (
     ParseError,
     PermissionDenied,
 )
+from reviews.seriralizers import ReviewSerializer
 
 
 class Amenities(APIView):
@@ -145,3 +146,26 @@ def delete(self, request, pk):
         raise PermissionDenied
     room.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# pagination class 사용 필요
+# 전체 api 리팩토링 필요
+class RoomReviews(APIView):
+    def get_object(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk):
+        try:
+            page = request.query_params.get("page", 1)
+            page = int(page)
+        except ValueError:
+            page = 1
+        page_size = 3
+        start = (page - 1) * page_size
+        end = start + page_size
+        room = self.get_object(pk)
+        serializer = ReviewSerializer(room.reviews.all()[start:end], many=True)
+        return Response(serializer.data)
