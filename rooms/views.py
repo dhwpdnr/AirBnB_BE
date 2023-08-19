@@ -3,7 +3,7 @@ from django.db import transaction
 from .models import Amenity, Room
 from categories.models import Category
 from .serializers import AmenitySerializer, RoomListSerializer, RoomDetailSerializer
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.exceptions import (
     NotFound,
@@ -15,19 +15,9 @@ from reviews.seriralizers import ReviewSerializer
 from medias.serializers import PhotoSerializer
 
 
-class Amenities(APIView):
-    def get(self, request):
-        all_amenities = Amenity.objects.all()
-        serializer = AmenitySerializer(all_amenities, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = AmenitySerializer(data=request.data)
-        if serializer.is_valid():
-            amenity = serializer.save()
-            return Response(AmenitySerializer(amenity).data)
-        else:
-            return Response(serializer.errors)
+class AmenityCreateListAPI(generics.ListCreateAPIView):
+    serializer_class = AmenitySerializer
+    queryset = Amenity.objects.all()
 
 
 class AmenityDetail(APIView):
