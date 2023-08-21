@@ -20,31 +20,9 @@ class AmenityCreateListAPI(generics.ListCreateAPIView):
     queryset = Amenity.objects.all()
 
 
-class AmenityDetail(APIView):
-    def get_object(self, pk):
-        try:
-            return Amenity.objects.get(pk=pk)
-        except Amenity.DoesNotExist:
-            return NotFound
-
-    def get(self, request, pk):
-        amenity = self.get_object(pk)
-        serializer = AmenitySerializer(amenity)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        amenity = self.get_object(pk)
-        serializer = AmenitySerializer(amenity, data=request.data, partial=True)
-        if serializer.is_valid():
-            updated_amenity = serializer.save()
-            return Response(AmenitySerializer(updated_amenity).data)
-        else:
-            return Response(serializer.errors)
-
-    def delete(self, request, pk):
-        amenity = self.get_object(pk)
-        amenity.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+class AmenityRetrieveUpdateDestroyAPI(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = AmenitySerializer
+    queryset = Amenity.objects.all()
 
 
 class Rooms(APIView):
