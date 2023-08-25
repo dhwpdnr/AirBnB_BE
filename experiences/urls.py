@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import Perks, PerkDetail
+from .views import PerkListCreateAPI, PerkDetail
 
 urlpatterns = [
-    path("perks/", Perks.as_view()),
+    path("perks/", PerkListCreateAPI.as_view()),
     path("perks/<int:pk>/", PerkDetail.as_view()),
 ]

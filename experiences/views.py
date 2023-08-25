@@ -1,24 +1,14 @@
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from .models import Perk
 from .serializers import PerkSerializer
 
 
-class Perks(APIView):
-    def get(self, request):
-        all_perks = Perk.objects.all()
-        serializer = PerkSerializer(all_perks, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = PerkSerializer(data=request.data)
-        if serializer.is_valid():
-            perk = serializer.save()
-            return Response(PerkSerializer(perk).data)
-        else:
-            return Response(serializer.errors)
+class PerkListCreateAPI(generics.ListCreateAPIView):
+    serializer_class = PerkSerializer
+    queryset = Perk.objects.all()
 
 
 class PerkDetail(APIView):
