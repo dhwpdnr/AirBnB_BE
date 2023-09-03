@@ -25,6 +25,11 @@ class AmenityRetrieveUpdateDestroyAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Amenity.objects.all()
 
 
+class RoomListAPI(generics.ListAPIView):
+    serializer_class = RoomListSerializer
+    queryset = Room.objects.all()
+
+
 class Rooms(APIView):
     def get(self, request):
         all_rooms = Room.objects.all()
