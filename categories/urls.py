@@ -1,20 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 from .views import CategoryViewSet
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register("", CategoryViewSet)
 
 urlpatterns = [
-    path(
-        "",
-        CategoryViewSet.as_view(
-            {
-                "get": "list",
-                "post": "create",
-            }
-        ),
-    ),
-    path(
-        "<int:pk>/",
-        CategoryViewSet.as_view(
-            {"get": "retrieve", "put": "partial_update", "delete": "destroy"}
-        ),
-    ),
+    path("", include(router.urls)),
 ]
